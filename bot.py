@@ -198,18 +198,23 @@ def gemini_models():
     return _MODELS
 
 
+_DEAD = set()  # модели, у которых в этом запуске кончилась квота (429): повторно не пробуем
+
+
 def _gemini_call(prompt, mt, tools=None, system=True):
-    for model in gemini_models()[:3]:
+    for model in [m for m in gemini_models() if m not in _DEAD][:6]:
         body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"maxOutputTokens": mt + 3000, "temperature": 0.85}}
         if system:
             body["systemInstruction"] = {"parts": [{"text": SYSTEM}]}
         if tools:
             body["tools"] = tools
-        r = S.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", timeout=90,
+        r = S.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", timeout=40,
                    headers={"x-goog-api-key": os.environ["GEMINI_API_KEY"]}, json=body)
         if r.ok:
             return r.json()["candidates"][0]
-        log.warning("Gemini %s: %s %s", model, r.status_code, r.text[:150])
+        if r.status_code in (429, 404, 403):
+            _DEAD.add(model)
+        log.warning("Gemini %s: %s %s", model, r.status_code, r.text[:100].replace("\n", " "))
 
 
 def _gemini(prompt, mt):
@@ -258,6 +263,7 @@ def llm(prompt, mt=1200):
                 out = fn(prompt, mt)
                 if out and out.strip():
                     return out.strip()
+                break  # провайдер ответил отказом (квота): повтор не поможет, идём к запасному
             except (requests.RequestException, KeyError, IndexError, ValueError) as e:
                 log.warning("%s: %s", env, e)
             time.sleep(3)
