@@ -1,9 +1,19 @@
 {
- "seen": [],
- "log": [],
- "count": 0,
+ "seen": [
+  "https://www.ign.com/articles/piranha-plant-slippers-amazon-black-friday-deal-2026"
+ ],
+ "log": [
+  {
+   "d": "2026-11-22",
+   "ts": "2026-11-22T21:33:46.518114+03:00",
+   "t": "Главный геймерский подарок найден, но есть нюанс",
+   "u": "https://www.ign.com/articles/piranha-plant-slippers-amazon-black-friday-deal-2026",
+   "k": "news"
+  }
+ ],
+ "count": 1,
  "meta": {
   "fail": "2026-11-22T16:57:02.440978+03:00",
-  "fails": 1
+  "report": "2026-11-22"
  }
 }
