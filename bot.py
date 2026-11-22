@@ -76,11 +76,14 @@ class NoTopic(Exception):
 def get(url, tries=3, **kw):
     for i in range(tries):
         try:
-            r = S.get(url, timeout=20, **kw)
+            r = S.get(url, timeout=12, **kw)
             r.raise_for_status()
             return r
         except requests.RequestException as e:
             log.warning("%s (%d/%d): %s", url, i + 1, tries, e)
+            code = getattr(e.response, "status_code", 0)
+            if code in (400, 401, 403, 404, 410, 451):
+                break  # повтор не поможет
             time.sleep(2 * (i + 1))
     return None
 
@@ -578,6 +581,13 @@ def check():
         print("OK  " if fetch_rss(n, u) else "FAIL", "RSS", n)
     print("OK  " if fetch_reddit() else "FAIL", "Reddit (может быть пусто, если нет постов с нужным рейтингом)")
     print("OK  " if fetch_steam() else "FAIL", "Steam")
+    if os.getenv("TG_TOKEN"):
+        try:
+            print("Telegram бот:", tg("getMe", json={})["result"]["username"])
+            r = tg("getChat", json={"chat_id": os.getenv("TG_CHAT_ID", "")})["result"]
+            print("Telegram канал:", r.get("title") or r.get("username"))
+        except Exception as e:
+            print("FAIL Telegram:", e)
     for env in ("GEMINI_API_KEY", "GROQ_API_KEY", "ANTHROPIC_API_KEY"):
         print("ключ" if os.getenv(env) else "нет ", env)
     if any(os.getenv(k) for k in ("GEMINI_API_KEY", "GROQ_API_KEY", "ANTHROPIC_API_KEY")):
@@ -632,7 +642,7 @@ def main():
 
     first = a.force or ROTATION[st["count"] % len(ROTATION)]
     fmts = [first] + [f for f in ("news", "gem", "poll") if f != first]  # запасные форматы
-    ok = False
+    ok, errors = False, []
     for f in fmts:
         try:
             run_format(st, f, a.dry_run)
@@ -640,10 +650,11 @@ def main():
             log.info("Опубликовано: %s", f)
             break
         except Exception as e:  # любой сбой формата -> пробуем следующий
-            log.warning("Формат %s не удался: %s", f, e)
+            errors.append(f"{f}: {e}"[:300])
+            log.error("Формат %s не удался: %s", f, e)
     if not a.dry_run:
         if not ok:
-            throttled_alert(st, now, "fail", 6, "Не удалось ничего опубликовать (источники/нейросеть/Telegram). Смотрите логи в Actions.")
+            throttled_alert(st, now, "fail", 6, "Не удалось ничего опубликовать:\n" + "\n".join(errors))
         save_state(st)
     if not ok:
         sys.exit(1)
