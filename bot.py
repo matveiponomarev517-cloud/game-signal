@@ -60,6 +60,17 @@ SYSTEM = (f"Ты автор популярного русскоязычного 
           "Не копируй исходный текст, пересказывай своими словами. Никаких вступлений вроде «Вот пост», сразу текст. "
           "Разрешены только теги <b> и <i>.")
 
+STYLE_EXAMPLES = (
+    "\n\nОбразцы ТОНА (только манера, факты и сюжеты оттуда не использовать):\n"
+    "1) <b>Студия выкатила патч, которого ждали полгода</b>\n\nИ да, баланс боссов переписан. Игроки уже спорят: стало интереснее или просто злее? "
+    "По-моему, это тот редкий случай, когда сложность честная. А вы уже дошли до финала?\n#патч\n"
+    "2) <b>Три часа в игре, а я всё ещё в меню настроек</b>\n\nШутка, но почти. Инди-хит недели цепляет не графикой, а тем, что "
+    "каждый вечер приносит одну маленькую победу. Идеально, чтобы выдохнуть после работы. Во что играете перед сном?\n#инди")
+_sf = BASE / "style.txt"
+if _sf.exists():  # свои любимые посты: положите в style.txt, бот будет писать в вашей манере
+    SYSTEM += "\n\nЕщё образцы тона автора канала:\n" + _sf.read_text(encoding="utf-8")[:3000]
+SYSTEM += STYLE_EXAMPLES
+
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s", stream=sys.stderr)
 log = logging.getLogger("bot")
 S = requests.Session()
@@ -128,7 +139,7 @@ def fetch_steam():
         for g in d.get(cat, {}).get("items", []):
             if "id" in g:
                 disc = g.get("discount_percent")
-                out.append(dict(kind="gem", id=g["id"], name=g["name"], label=lab + (f" -{disc}%" if disc else ""), key=f"steam:{g['id']}"))
+                out.append(dict(kind="gem", id=g["id"], name=g["name"], disc=disc or 0, label=lab + (f" -{disc}%" if disc else ""), key=f"steam:{g['id']}"))
     return out
 
 
@@ -300,6 +311,11 @@ def make_cover(title, tag, bg_bytes=None):
         for y in range(H):
             k = y / H
             d.line([(0, y), (W, y)], fill=tuple(int(c1[i] + (c2[i] - c1[i]) * k) for i in range(3)))
+        layout = rnd.choice(["plain", "circle", "bar"])
+        if layout == "circle":
+            d.ellipse((W - 520, -160, W + 140, 500), fill=tuple(min(255, v + 28) for v in c2))
+        elif layout == "bar":
+            d.rectangle((0, 0, 26, H), fill=accent)
     else:
         img.paste(sharp, ((W - sharp.width) // 2, 100))
     d = ImageDraw.Draw(img)
@@ -437,20 +453,23 @@ def topic(kind, st):
             raise NoTopic("reddit")
         x = c[0]
         note = "Это слух/неподтверждённая информация, прямо скажи об этом." if x["leak"] else ""
-        return dict(x, facts=f"Источник: {x['src']} (обсуждение набрало {x['score']} голосов)\nЗаголовок: {x['title']}\nТекст: {x['text']}\n{note}",
+        return dict(x, tag="СЛУХ" if x["leak"] else None, rubric="#слух" if x["leak"] else "", facts=f"Источник: {x['src']} (обсуждение набрало {x['score']} голосов)\nЗаголовок: {x['title']}\nТекст: {x['text']}\n{note}",
                     fallback=f"<b>{html.escape(x['title'])}</b>\n\nОбсуждают на {x['src']}. Что думаете?")
     if kind == "gem":
         c = [x for x in fetch_steam() if x["key"] not in seen]
         if not c:
             raise NoTopic("steam")
-        x = random.choice(c)
+        deals = [g for g in c if g.get("disc", 0) >= 50]
+        x = random.choice(deals or c)
         d = steam_details(x["id"]) or {}
+        shots = [sh.get("path_full") for sh in d.get("screenshots", []) if sh.get("path_full")]
         genres = ", ".join(g["description"] for g in d.get("genres", [])[:4])
         price = (d.get("price_overview") or {}).get("final_formatted") or ("бесплатно" if d.get("is_free") else "")
         desc = plain(d.get("short_description", ""))
         facts = (f"Игра: {x['name']}\nСтатус в Steam: {x['label']}\nЖанры: {genres}\nДата выхода: {(d.get('release_date') or {}).get('date', '')}\n"
                  f"Цена: {price}\nРазработчик: {', '.join(d.get('developers', []))}\nОписание: {desc}")
-        return dict(x, facts=facts, bg=d.get("header_image") or f"https://cdn.akamai.steamstatic.com/steam/apps/{x['id']}/header.jpg",
+        return dict(x, facts=facts, tag="ИГРА ЗА КОПЕЙКИ" if deals else None, rubric="#игразакопейки" if deals else "#находка",
+                    bg=random.choice([d.get("header_image") or f"https://cdn.akamai.steamstatic.com/steam/apps/{x['id']}/header.jpg"] + shots[:2]),
                     src="Steam", link=f"https://store.steampowered.com/app/{x['id']}", title=x["name"],
                     fallback=f"<b>{html.escape(x['name'])}</b> ({x['label']})\n\n{html.escape(desc[:400])}\n\n{html.escape(price)}")
     # news: свежие записи из случайного порядка лент
@@ -479,17 +498,26 @@ def any_topic(st):
     raise NoTopic("any")
 
 
-def mark(st, t, title, url=""):
+def mark(st, t, title, url="", kind=""):
     if t and t.get("key"):
         st["seen"].append(t["key"])
     now = datetime.now(MSK)
-    st["log"].append({"d": now.strftime("%Y-%m-%d"), "ts": now.isoformat(), "t": title[:120], "u": url})
+    st["log"].append({"d": now.strftime("%Y-%m-%d"), "ts": now.isoformat(), "t": title[:120], "u": url, "k": kind})
     st["count"] += 1
 
 
 def hook(text):
     m = re.search(r"<b>(.*?)</b>", text, re.S)
     return plain(m.group(1) if m else text.split("\n")[0])[:90]
+
+
+def review(text, facts):
+    """Второй проход: редактор вычёркивает всё, чего нет в фактах. При любом сомнении возвращает исходный текст."""
+    if os.getenv("FACTCHECK", "1") == "0":
+        return text
+    raw = llm("Ты строгий редактор. Сравни пост с фактами. Удали или смягчи всё, чего нет в фактах (цифры, даты, названия, цитаты), "
+              "сохрани стиль, теги <b>/<i>, длину и вопрос в конце. Верни ТОЛЬКО итоговый текст поста.\n\nФакты:\n" + facts + "\n\nПост:\n" + text, mt=900)
+    return raw if raw and len(raw) > 100 and len(raw) >= len(text) * 0.5 else text
 
 
 # ───────────── форматы ─────────────
@@ -504,12 +532,14 @@ def f_short(st, kind, dry):
     t = topic(kind, st)
     recent = "; ".join(x["t"] for x in st["log"][-5:])
     raw = llm(f"{TASKS[kind]} Подача: {random.choice(ANGLES)}. Первая строка должна отличаться от недавних: {recent}.\n\nФакты:\n{t['facts']}")
-    text = fmt(raw) if raw and len(raw) > 120 else t["fallback"]
+    text = fmt(review(raw, t["facts"])) if raw and len(raw) > 120 else t["fallback"]
+    if t.get("rubric") and t["rubric"] not in text:
+        text += "\n" + t["rubric"]
     text += f'\n\n🔗 <a href="{html.escape(t["link"], quote=True)}">{html.escape(t["src"])}</a>'
-    img = make_cover(hook(text), TAGS[kind], download(t.get("bg")))
+    img = make_cover(hook(text), t.get("tag") or TAGS[kind], download(t.get("bg")))
     send_post(text, img, dry=dry)
     if not dry:
-        mark(st, t, hook(text), t["link"])
+        mark(st, t, hook(text), t["link"], kind)
 
 
 def f_long(st, dry):
@@ -548,7 +578,7 @@ def f_long(st, dry):
     mid = send_post(f"<b>{html.escape(title)}</b>\n\n{html.escape(teaser)}\n\n👇 Разбор в комментарии ниже", img, dry=dry)
     send_post(article, dry=dry, reply_to=mid or None)
     if not dry:
-        mark(st, t, title, t["link"])
+        mark(st, t, title, t["link"], "longread")
 
 
 def f_poll(st, dry):
@@ -564,7 +594,7 @@ def f_poll(st, dry):
         print("─" * 40, "\n[опрос]", q, opts)
         return
     tg("sendPoll", json={"chat_id": os.environ["TG_CHAT_ID"], "question": q, "options": opts, "is_anonymous": True})
-    mark(st, None, "Опрос: " + q)
+    mark(st, None, "Опрос: " + q, kind="poll")
 
 
 def run_format(st, fmt_name, dry):
@@ -611,6 +641,20 @@ def blocked(st, now, manual):
     return None
 
 
+def weekly_report(st, now):
+    day = now.strftime("%Y-%m-%d")
+    if now.weekday() != 6 or now.hour < 20 or st["meta"].get("report") == day or not os.getenv("TG_ADMIN_ID"):
+        return
+    since = (now - timedelta(days=7)).strftime("%Y-%m-%d")
+    week = [x for x in st["log"] if x["d"] > since]
+    kinds = {}
+    for x in week:
+        kinds[x.get("k") or "?"] = kinds.get(x.get("k") or "?", 0) + 1
+    st["meta"]["report"] = day
+    fails = st["meta"].pop("fails", 0)
+    alert("📊 Итоги недели: постов " + str(len(week)) + " (" + ", ".join(f"{k}: {v}" for k, v in kinds.items()) + f"). Неудачных запусков: {fails}.")
+
+
 def throttled_alert(st, now, key, hours, msg):
     last = st["meta"].get(key)
     if last and now - datetime.fromisoformat(last) < timedelta(hours=hours):
@@ -635,6 +679,8 @@ def main():
 
     if not a.dry_run and st["log"] and st["log"][-1].get("ts") and now - datetime.fromisoformat(st["log"][-1]["ts"]) > timedelta(hours=SILENCE_HOURS):
         throttled_alert(st, now, "silence", 24, f"Нет публикаций больше {SILENCE_HOURS} ч. Проверьте логи в GitHub Actions.")
+    if not a.dry_run:
+        weekly_report(st, now)
     why = blocked(st, now, manual)
     if why and not a.dry_run:
         save_state(st)
@@ -654,6 +700,7 @@ def main():
             log.error("Формат %s не удался: %s", f, e)
     if not a.dry_run:
         if not ok:
+            st["meta"]["fails"] = st["meta"].get("fails", 0) + 1
             throttled_alert(st, now, "fail", 6, "Не удалось ничего опубликовать:\n" + "\n".join(errors))
         save_state(st)
     if not ok:
