@@ -1,7 +1,8 @@
 {
  "seen": [
   "https://www.ign.com/articles/piranha-plant-slippers-amazon-black-friday-deal-2026",
-  "steam:227300"
+  "steam:227300",
+  "steam:1850570"
  ],
  "log": [
   {
@@ -17,15 +18,24 @@
    "t": "Euro Truck Simulator 2",
    "u": "https://store.steampowered.com/app/227300",
    "k": "gem"
+  },
+  {
+   "d": "2026-11-23",
+   "ts": "2026-11-23T20:57:11.910753+03:00",
+   "t": "Кодзима снова в топе Steam, и на это есть 824 причины",
+   "u": "https://store.steampowered.com/app/1850570",
+   "k": "gem"
   }
  ],
- "count": 2,
+ "count": 3,
  "meta": {
   "fail": "2026-11-22T16:57:02.440978+03:00",
   "report": "2026-11-22",
   "qday": "2026-11-23",
-  "dead": [],
-  "calls": 3,
-  "alive": "2026-11-23 14"
+  "dead": [
+   "gemini-3.7-flash"
+  ],
+  "calls": 6,
+  "alive": "2026-11-23 20"
  }
 }
