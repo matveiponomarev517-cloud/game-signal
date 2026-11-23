@@ -1,6 +1,7 @@
 {
  "seen": [
-  "https://www.ign.com/articles/piranha-plant-slippers-amazon-black-friday-deal-2026"
+  "https://www.ign.com/articles/piranha-plant-slippers-amazon-black-friday-deal-2026",
+  "steam:227300"
  ],
  "log": [
   {
@@ -9,11 +10,22 @@
    "t": "Главный геймерский подарок найден, но есть нюанс",
    "u": "https://www.ign.com/articles/piranha-plant-slippers-amazon-black-friday-deal-2026",
    "k": "news"
+  },
+  {
+   "d": "2026-11-23",
+   "ts": "2026-11-23T14:31:59.581808+03:00",
+   "t": "Euro Truck Simulator 2",
+   "u": "https://store.steampowered.com/app/227300",
+   "k": "gem"
   }
  ],
- "count": 1,
+ "count": 2,
  "meta": {
   "fail": "2026-11-22T16:57:02.440978+03:00",
-  "report": "2026-11-22"
+  "report": "2026-11-22",
+  "qday": "2026-11-23",
+  "dead": [],
+  "calls": 3,
+  "alive": "2026-11-23 14"
  }
 }
