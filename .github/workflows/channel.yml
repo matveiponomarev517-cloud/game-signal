@@ -45,6 +45,18 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PROXY: ${{ secrets.PROXY }}
           CHANNEL_NAME: ${{ vars.CHANNEL_NAME }}
+          MAX_PER_DAY: ${{ vars.MAX_PER_DAY }}
+          MIN_GAP_MINUTES: ${{ vars.MIN_GAP_MINUTES }}
+          POST_HOUR_FROM: ${{ vars.POST_HOUR_FROM }}
+          POST_HOUR_TO: ${{ vars.POST_HOUR_TO }}
+          SOURCE_IMAGE: ${{ vars.SOURCE_IMAGE }}
+          VIDEO: ${{ vars.VIDEO }}
+          WEB_SCOUT: ${{ vars.WEB_SCOUT }}
+          LONGREADS: ${{ vars.LONGREADS }}
+          FACTCHECK: ${{ vars.FACTCHECK }}
+          LLM_DAILY_MAX: ${{ vars.LLM_DAILY_MAX }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          GROQ_MODEL: ${{ vars.GROQ_MODEL }}
       - name: Save state
         if: always()
         run: |
