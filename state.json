@@ -3,7 +3,8 @@
   "https://www.ign.com/articles/piranha-plant-slippers-amazon-black-friday-deal-2026",
   "steam:227300",
   "steam:1850570",
-  "steam:570940"
+  "steam:570940",
+  "https://stopgame.ru/newsdata/73612/reliz_gta_vi_stal_samym_masshtabnym_v_istorii_playstation_bolee_39_mln_chelovek_na_ps5"
  ],
  "log": [
   {
@@ -33,15 +34,29 @@
    "t": "DARK SOULS™: REMASTERED",
    "u": "https://store.steampowered.com/app/570940",
    "k": "gem"
+  },
+  {
+   "d": "2026-11-24",
+   "ts": "2026-11-24T14:07:46.407689+03:00",
+   "t": "GTA VI перевыполнила план, пока игроки упражняются в остроумии.",
+   "u": "https://stopgame.ru/newsdata/73612/reliz_gta_vi_stal_samym_masshtabnym_v_istorii_playstation_bolee_39_mln_chelovek_na_ps5",
+   "k": "news"
   }
  ],
- "count": 4,
+ "count": 5,
  "meta": {
   "fail": "2026-11-22T16:57:02.440978+03:00",
   "report": "2026-11-22",
   "qday": "2026-11-24",
-  "dead": [],
-  "calls": 3,
-  "alive": "2026-11-24 11"
+  "dead": [
+   "gemini-2.5-flash",
+   "gemini-3.5-flash",
+   "gemini-3.5-flash-lite",
+   "gemini-3.6-flash",
+   "gemini-3.7-flash",
+   "gemini-3.8-flash"
+  ],
+  "calls": 5,
+  "alive": "2026-11-24 14"
  }
 }
