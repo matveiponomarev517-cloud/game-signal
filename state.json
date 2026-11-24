@@ -49,9 +49,16 @@
    "t": "DARK SOULS™ III",
    "u": "https://store.steampowered.com/app/374320",
    "k": "gem"
+  },
+  {
+   "d": "2026-11-24",
+   "ts": "2026-11-24T21:21:43.803209+03:00",
+   "t": "Опрос: Во что играете на выходных?",
+   "u": "",
+   "k": "poll"
   }
  ],
- "count": 6,
+ "count": 7,
  "meta": {
   "fail": "2026-11-22T16:57:02.440978+03:00",
   "report": "2026-11-22",
@@ -73,7 +80,7 @@
    "gemini-omni-1.2-flash",
    "gemini-omni-flash-preview"
   ],
-  "calls": 9,
-  "alive": "2026-11-24 20"
+  "calls": 11,
+  "alive": "2026-11-24 21"
  }
 }
