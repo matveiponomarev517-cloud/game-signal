@@ -4,7 +4,8 @@
   "steam:227300",
   "steam:1850570",
   "steam:570940",
-  "https://stopgame.ru/newsdata/73612/reliz_gta_vi_stal_samym_masshtabnym_v_istorii_playstation_bolee_39_mln_chelovek_na_ps5"
+  "https://stopgame.ru/newsdata/73612/reliz_gta_vi_stal_samym_masshtabnym_v_istorii_playstation_bolee_39_mln_chelovek_na_ps5",
+  "steam:1808500"
  ],
  "log": [
   {
@@ -41,22 +42,31 @@
    "t": "GTA VI перевыполнила план, пока игроки упражняются в остроумии.",
    "u": "https://stopgame.ru/newsdata/73612/reliz_gta_vi_stal_samym_masshtabnym_v_istorii_playstation_bolee_39_mln_chelovek_na_ps5",
    "k": "news"
+  },
+  {
+   "d": "2026-11-24",
+   "ts": "2026-11-24T20:14:07.590961+03:00",
+   "t": "ARC Raiders отдают за полцены: стоит ли влетать в этот экстракшен",
+   "u": "https://store.steampowered.com/app/1808500",
+   "k": "gem"
   }
  ],
- "count": 5,
+ "count": 6,
  "meta": {
   "fail": "2026-11-22T16:57:02.440978+03:00",
   "report": "2026-11-22",
   "qday": "2026-11-24",
   "dead": [
    "gemini-2.5-flash",
+   "gemini-2.5-flash-lite",
    "gemini-3.5-flash",
    "gemini-3.5-flash-lite",
    "gemini-3.6-flash",
    "gemini-3.7-flash",
-   "gemini-3.8-flash"
+   "gemini-3.8-flash",
+   "gemini-flash-latest"
   ],
-  "calls": 5,
-  "alive": "2026-11-24 14"
+  "calls": 9,
+  "alive": "2026-11-24 20"
  }
 }
