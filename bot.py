@@ -765,9 +765,12 @@ def blocked(st, now, manual):
     if not HOUR_FROM <= now.hour < HOUR_TO:
         return f"вне окна {HOUR_FROM}–{HOUR_TO} МСК"
     if st["log"] and st["log"][-1].get("ts"):
+        # GitHub нередко пропускает запуски по расписанию: если отстаём от плана, пауза сокращается до 20 минут
+        expected = -(-MAX_PER_DAY * (now.hour - HOUR_FROM + 1) // (HOUR_TO - HOUR_FROM))
+        need = 20 if n + 1 < expected else MIN_GAP_MIN
         gap = (now - datetime.fromisoformat(st["log"][-1]["ts"])).total_seconds() / 60
-        if gap < MIN_GAP_MIN:
-            return f"пауза между постами ({int(gap)}/{MIN_GAP_MIN} мин)"
+        if gap < need:
+            return f"пауза между постами ({int(gap)}/{need} мин)"
     return None
 
 
