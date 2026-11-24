@@ -2,7 +2,8 @@
  "seen": [
   "https://www.ign.com/articles/piranha-plant-slippers-amazon-black-friday-deal-2026",
   "steam:227300",
-  "steam:1850570"
+  "steam:1850570",
+  "steam:28590"
  ],
  "log": [
   {
@@ -25,17 +26,22 @@
    "t": "Кодзима снова в топе Steam, и на это есть 824 причины",
    "u": "https://store.steampowered.com/app/1850570",
    "k": "gem"
+  },
+  {
+   "d": "2026-11-24",
+   "ts": "2026-11-24T11:16:11.651128+03:00",
+   "t": "Crysis Remastered Trilogy",
+   "u": "https://store.steampowered.com/app/28590",
+   "k": "gem"
   }
  ],
- "count": 3,
+ "count": 4,
  "meta": {
   "fail": "2026-11-22T16:57:02.440978+03:00",
   "report": "2026-11-22",
-  "qday": "2026-11-23",
-  "dead": [
-   "gemini-3.7-flash"
-  ],
-  "calls": 6,
-  "alive": "2026-11-24 06"
+  "qday": "2026-11-24",
+  "dead": [],
+  "calls": 3,
+  "alive": "2026-11-24 11"
  }
 }
