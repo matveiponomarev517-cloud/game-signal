@@ -1,7 +1,10 @@
 name: channel
 on:
   schedule:
-    - cron: "7 6-19 * * *"   # каждый час с 09:07 до 22:07 МСК; бот сам решает, что пора публиковать
+    - cron: "23 6-19 * * *"   # две попытки в час в «тихие» минуты (в начале часа GitHub чаще пропускает запуски)
+    - cron: "53 6-19 * * *"
+  repository_dispatch:       # внешний будильник (cron-job.org): надёжнее встроенного расписания GitHub
+    types: [tick]
   workflow_dispatch:
     inputs:
       force:
