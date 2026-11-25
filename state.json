@@ -6,7 +6,7 @@
   "steam:570940",
   "https://stopgame.ru/newsdata/73612/reliz_gta_vi_stal_samym_masshtabnym_v_istorii_playstation_bolee_39_mln_chelovek_na_ps5",
   "steam:374320",
-  "https://www.ign.com/articles/cassette-beasts-2002-preview-an-unmistakably-british-and-impressive-creature-collecting-rpg"
+  "steam:2183900"
  ],
  "log": [
   {
@@ -60,10 +60,10 @@
   },
   {
    "d": "2026-11-25",
-   "ts": "2026-11-25T19:58:54.496886+03:00",
-   "t": "Британская RPG про сбор существ внезапно затягивает",
-   "u": "https://www.ign.com/articles/cassette-beasts-2002-preview-an-unmistakably-british-and-impressive-creature-collecting-rpg",
-   "k": "news"
+   "ts": "2026-11-25T20:03:14.799644+03:00",
+   "t": "Уничтожать тиранидов со скидкой или ждать дальше?",
+   "u": "https://store.steampowered.com/app/2183900",
+   "k": "gem"
   }
  ],
  "count": 8,
@@ -81,7 +81,7 @@
    "gemini-3.8-flash",
    "gemini-flash-latest"
   ],
-  "calls": 2,
-  "alive": "2026-11-25 19"
+  "calls": 6,
+  "alive": "2026-11-25 20"
  }
 }
