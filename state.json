@@ -7,7 +7,8 @@
   "https://stopgame.ru/newsdata/73612/reliz_gta_vi_stal_samym_masshtabnym_v_istorii_playstation_bolee_39_mln_chelovek_na_ps5",
   "steam:374320",
   "steam:2183900",
-  "free:3328"
+  "free:3328",
+  "steam:1808500"
  ],
  "log": [
   {
@@ -72,24 +73,24 @@
    "t": "Забираем симулятор сантехника бесплатно",
    "u": "https://www.gamerpower.com/open/best-plumber-pc-giveaway",
    "k": "free"
+  },
+  {
+   "d": "2026-11-26",
+   "ts": "2026-11-26T20:06:46.298396+03:00",
+   "t": "Механические захватчики портят всю земную идиллию, но сейчас хотя бы со скидкой",
+   "u": "https://store.steampowered.com/app/1808500",
+   "k": "gem"
   }
  ],
- "count": 9,
+ "count": 10,
  "meta": {
   "fail": "2026-11-22T16:57:02.440978+03:00",
   "report": "2026-11-22",
-  "qday": "2026-11-25",
+  "qday": "2026-11-26",
   "dead": [
-   "gemini-2.5-flash",
-   "gemini-2.5-flash-lite",
-   "gemini-3.5-flash",
-   "gemini-3.5-flash-lite",
-   "gemini-3.6-flash",
-   "gemini-3.7-flash",
-   "gemini-3.8-flash",
-   "gemini-flash-latest"
+   "gemini-2.5-flash"
   ],
-  "calls": 9,
-  "alive": "2026-11-26 04"
+  "calls": 3,
+  "alive": "2026-11-26 20"
  }
 }
