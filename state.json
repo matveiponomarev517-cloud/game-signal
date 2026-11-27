@@ -10,7 +10,8 @@
   "free:3328",
   "steam:1808500",
   "steam:668580",
-  "steam:1222140"
+  "steam:1222140",
+  "steam:72176"
  ],
  "log": [
   {
@@ -96,15 +97,22 @@
    "t": "Detroit: Become Human",
    "u": "https://store.steampowered.com/app/1222140",
    "k": "gem"
+  },
+  {
+   "d": "2026-11-27",
+   "ts": "2026-11-27T21:22:20.528210+03:00",
+   "t": "Atomic Heart с полным набором ворвалась в топ Steam со скидкой 58 процентов",
+   "u": "https://store.steampowered.com/app/72176",
+   "k": "longread"
   }
  ],
- "count": 12,
+ "count": 13,
  "meta": {
   "fail": "2026-11-22T16:57:02.440978+03:00",
   "report": "2026-11-22",
   "qday": "2026-11-27",
   "dead": [],
-  "calls": 6,
-  "alive": "2026-11-27 20"
+  "calls": 8,
+  "alive": "2026-11-27 21"
  }
 }
